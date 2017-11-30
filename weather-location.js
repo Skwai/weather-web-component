@@ -2,6 +2,7 @@
 
 const APP_ID = 'ded3d81681300110405496b8c6fd5ea3'
 const API_URL = 'https://api.openweathermap.org/data/2.5/weather'
+const TICK_RATE = 60* 1000
 
 const style = `
   <style>
@@ -61,7 +62,11 @@ class WeatherLocation extends HTMLElement {
 
   async connectedCallback () {
     const { city, country } = this.getAttributes('city', 'country')
-    const { name, main, weather, sys } = await WeatherLocation.getWeatherData(city, country)
+    this.getWeatherData(city, country);
+  }
+
+  async getWeatherData(city, country) {
+    const { name, main, weather, sys } = await this.fetchWeatherData(city, country)
     this.render({
       city: name,
       country: sys.country,
@@ -70,6 +75,7 @@ class WeatherLocation extends HTMLElement {
       maxTemp: main.temp_max,
       conditions: weather[0].main
     })
+    setTimeout(this.getWeatherData.bind(this, city, country), TICK_RATE)
   }
 
   getAttributes (...attributes) {
@@ -79,7 +85,7 @@ class WeatherLocation extends HTMLElement {
     }), {})
   }
   
-  static async getWeatherData (city, country) {
+  async fetchWeatherData (city, country) {
     const params = new URLSearchParams({
       appid: APP_ID,
       q: [city,country].join(',')
