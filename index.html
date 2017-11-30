@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<title>Weather</title>
+<style>
+  body {
+    background: #f1f1f1;
+    font: 16px "Open Sans", Helvetica, Arial, sans-serif;
+    color: #222;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  .locations {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  weather-location {
+    padding: 1rem;
+    width: 16rem;
+  }
+</style>
+</head>
+<body>
+  <h1>Weather</h1>
+  <div class="locations">
+    <weather-location
+      city="Hobart"
+      country="AU"
+    ></weather-location>
+    <weather-location
+      city="New York"
+      country="US"
+    ></weather-location>
+    <weather-location
+      city="London"
+      country="UK"
+    ></weather-location>
+  </div>
+  <script async src="./weather-location.js"></script>
+</body>
+</html>
