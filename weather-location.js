@@ -6,51 +6,51 @@ const TICK_RATE = 10 * 1000
 
 const style = `
   <style>
-  .Wrap {
-    padding: 1rem;
-    box-shadow: rgba(0,0,0,.1) 0 0 0 1px, rgba(0,0,0,.1) 0 2px 10px;
-    text-align: center;
-    background: #fff;
-    border-radius: 3px;
-  }
+    .Wrap {
+      padding: 1rem;
+      box-shadow: rgba(0,0,0,.1) 0 0 0 1px, rgba(0,0,0,.1) 0 2px 10px;
+      text-align: center;
+      background: #fff;
+      border-radius: 3px;
+    }
 
-  .Location {
-    margin: 0 0;
-  }
+    .Location {
+      margin: 0 0;
+    }
 
-  .Country {
-    text-transform: uppercase;
-    opacity: 0.5;
-    font-weight: 400;
-  }
+    .Country {
+      text-transform: uppercase;
+      opacity: 0.5;
+      font-weight: 400;
+    }
 
-  .Conditions {
-    margin-top: 0.5rem;
-  }
+    .Conditions {
+      margin-top: 0.5rem;
+    }
 
-  .Current {
-    margin-top: 0.5rem;
-    font-size: 2rem;
-  }
+    .Current {
+      margin-top: 0.5rem;
+      font-size: 2rem;
+    }
 
-  .Range {
-    margin-top: 0.5rem;
-    display: flex;
-    justify-content: center;
-  }
+    .Range {
+      margin-top: 0.5rem;
+      display: flex;
+      justify-content: center;
+    }
 
-  .Min,
-  .Max {
-    margin: 0 0.25rem;
-  }
+    .Min,
+    .Max {
+      margin: 0 0.25rem;
+    }
 
-  .Min {
-    opacity: .5;
-  }
+    .Min {
+      opacity: .5;
+    }
 
-  sup {
-    font-size: 50%;
-  }
+    sup {
+      font-size: 50%;
+    }
   </style>
 `
 
@@ -136,8 +136,7 @@ class WeatherLocation extends HTMLElement {
     return (kelvin - 273.15).toFixed(0)
   }
 
-  render () 
-    
+  render () {
     const {
       city,
       country,
