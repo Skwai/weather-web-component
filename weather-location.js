@@ -136,7 +136,8 @@ class WeatherLocation extends HTMLElement {
     return (kelvin - 273.15).toFixed(0)
   }
 
-  render () {
+  render () 
+    
     const {
       city,
       country,
