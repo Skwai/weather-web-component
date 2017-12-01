@@ -2,7 +2,7 @@
 
 const APP_ID = 'ded3d81681300110405496b8c6fd5ea3'
 const API_URL = 'https://api.openweathermap.org/data/2.5/weather'
-const TICK_RATE = 60* 1000
+const TICK_RATE = 10 * 1000
 
 const style = `
   <style>
@@ -55,27 +55,64 @@ const style = `
 `
 
 class WeatherLocation extends HTMLElement {
+  _get(name) {
+    return this.getAttribute(name)
+  }
+
+  _set(name, val) {
+    if (val) {
+      this.setAttribute(name, val)
+    }
+    else {
+      this.removeAttribute(name)
+    }
+    window.requestAnimationFrame(this.render)
+  }
+
+  data () {
+    return {
+      city: null,
+      country: null,
+      minTemp: null,
+      maxTemp: null,
+      conditions: null
+    }
+  }
+
+  _bindData () {
+    const data = this.data()
+    const props = Object.entries(data).reduce((obj, [key, value]) => ({
+      ...obj,
+      [key]: {
+        set: (v) => this._set(key, v),
+        get: () => this._get(key)
+      }
+    }), {})
+    Object.defineProperties(this, props)
+  }
+
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' });
+    this.render = this.render.bind(this)
+    this._bindData();
   }
 
   async connectedCallback () {
-    const { city, country } = this.getAttributes('city', 'country')
-    this.getWeatherData(city, country);
+    this.getWeatherData();
   }
 
-  async getWeatherData(city, country) {
-    const { name, main, weather, sys } = await this.fetchWeatherData(city, country)
-    this.render({
-      city: name,
-      country: sys.country,
-      currentTemp: main.temp,
-      minTemp: main.temp_min,
-      maxTemp: main.temp_max,
-      conditions: weather[0].main
+  async getWeatherData () {
+    const { city, country } = this
+    const data = await this.fetchWeatherData(city, country)
+    Object.assign(this, {
+      currentTemp: data.main.temp,
+      minTemp: data.main.temp_min,
+      maxTemp: data.main.temp_max,
+      conditions: data.weather[0].main
     })
-    setTimeout(this.getWeatherData.bind(this, city, country), TICK_RATE)
+    window.requestAnimationFrame(this.render)
+    setTimeout(this.getWeatherData.bind(this), TICK_RATE)
   }
 
   getAttributes (...attributes) {
@@ -99,14 +136,16 @@ class WeatherLocation extends HTMLElement {
     return (kelvin - 273.15).toFixed(0)
   }
 
-  render ({
-    city,
-    country,
-    currentTemp,
-    minTemp,
-    maxTemp,
-    conditions
-  }) {
+  render () {
+    const {
+      city,
+      country,
+      conditions,
+      currentTemp,
+      minTemp,
+      maxTemp
+    } = this
+
     const template = `
       ${style}
       <div class="Wrap">
